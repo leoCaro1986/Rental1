@@ -271,8 +271,6 @@ def editDBUser(id):
 
 @app.route('/propertyByCity')
 def propertyByCity():
-   
-  
     return render_template("propertyByCity.html") 
     # return render_template("propertyByCity.html", propertyc = result)
 
