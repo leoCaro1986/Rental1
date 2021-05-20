@@ -116,7 +116,6 @@ def getPropertyByIdUser(id):
     mensaje = ""
     if property is None:
         return render_template("getProperty.html", mensaje = "El usuario no tiene ninguna propiedad asociada")    
-
     result.append({
         '_id':property['_id'],
         'cityP':property['cityP'],
