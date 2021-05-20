@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<div class="container">
+  <div class="text-center" style="padding:50px 0">
+      <div class="logo">Editar propiedad</div>
+      <!-- Main Form -->
+      <div class="login-form-1">
+        {% for property in propertyp %}
+            <form enctype="multipart/form-data" class="text-left" method="POST" action = "{{url_for('editDBProperty',id=property._id)}}" onsubmit="return validap();" >
+                <div class="login-form-main-message"></div>
+                <div class="main-login-form">
+                  <div class="login-group">
+                      <div class="form-group">
+                          <label for="cityP" class="sr-only"></label>
+                          <input type="text" class="form-control" id="cityP" value="{{property.cityP}}" name="cityP" placeholder="Ciudad">
+                      </div> 
+                      <div class="form-group">
+                          <label for="countryP" class="sr-only"></label>
+                          <input type="text" class="form-control" value="{{property.countryP}}" id="countryP" name="countryP" placeholder="País">
+                      </div>
+                      <div class="form-group">
+                          <label for="adressP" class="sr-only"></label>
+                          <input type="text" class="form-control" value="{{property.adressP}}" id="adressP" name="adressP" placeholder="Dirección">
+                      </div>
+                      <div class="form-group">
+                          <label for="ubication" class="sr-only"></label>
+                          <input type="text" class="form-control" value="{{property.ubication}}" id="ubication" name="ubication" placeholder="Ubicación en Google Maps">
+                      </div>
+                      <div class="form-group">
+                          <label for="roomNumber" class="sr-only"></label>
+                          <input type="number" class="form-control" value="{{property.roomNumber}}" id="roomNumber" name="roomNumber" placeholder="Numero de habitaciones">
+                      </div> <br>
+                      <div class="form-group">
+                        <label for="imageP" class="sr-only">Cargue imagen destacada</label>
+                        <input type="file" class="form-control" id="imageP" name="imageP" placeholder="Cargue sus imagenes aquí">
+                    </div> <br>
+                    <div class="form-group">
+                        <label for="imageMain" class="sr-only">Cargue las imagenes</label>
+                        <input type="file" class="form-control" id="imageMain[]" name="imageMain[]" multiple="">
+                    </div> <br>
+                      <div class="form-group">
+                          <label for="priceDay" class="sr-only"></label>
+                          <input type="number" class="form-control" value="{{property.priceDay}}" id="priceDay" name="priceDay" placeholder="Valor por noche">
+                      </div> <br>
+                      <div class="form-group">
+                          <label for="Description" class="sr-only">Ingrese la descripción de la propiedad</label>
+                      
+                          <input type="text" name="Description" spellcheck="true" value="{{property.Description}}" id="Description" type="text" class="form-control" cols="30" rows="10">
+                      
+                      </div>
+                  </div>
+                  <button type="submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+                </div>
+            
+            </form>
+        {% endfor %} 
+      </div>
+      <!-- end:Main Form -->
+  </div>
+</div>
+
+
+{% endblock  %}

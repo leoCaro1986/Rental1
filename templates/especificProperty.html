@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<section>
+  <div id="especificCard" class="card mb-3" style="max-width: 1040px;">
+    
+    <div class="row ">
+    {% for property in propertyp %}
+      <div class="col-md-4">
+        <img src="{{url_for('static', filename='images/'+property.imageP )}}" width="350" height="200" style="border-radius: 3%;" class="col md-3">
+      {% for imageProperty in property['listimage'] %}   
+        <img src="{{url_for('static', filename='images/'+imageProperty )}}" width="350" height="200" style="border-radius: 3%;">
+      {% endfor %}  
+    </div>
+      <div class="col-md-9"> 
+          <p class="card-text">{{property.Description}}</p>
+          <p class="card-text">Ubicada en {{property.cityP}} {{property.countryP}} en la {{property.adressP}} </p>
+          <p class="card-text">Cuenta con {{property.roomNumber}} habitaciones y tiene un valor de ${{property.priceDay}} la noche</p>
+          <a href="{{property.ubication}}" target="_blank"><strong class="text" style="color:blue";>Ubicación google maps</strong></a>
+      </div>
+    </div>
+    {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

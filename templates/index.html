@@ -1,0 +1,164 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+    <!-- <img src="{{url_for('static', filename='img/turismo1.jpg')}}" width="1350" height="700" alt=""> -->
+    <div id="carouselExampleFade" class="carousel slide carousel-fade " data-bs-ride="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="{{url_for('static', filename='img/turismo1.jpg')}}" class="d-block w-100 " height="520" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="{{url_for('static', filename='img/turismo2.png')}}" class="d-block w-100" height="520" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="{{url_for('static', filename='img/turismo3.jpg')}}" class="d-block w-100" height="520" alt="...">
+          </div>
+        </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div> 
+
+    <section  class="" id="formreserva">
+          <div class=""> 
+            <form class="form " action="/action_page"> 
+              <div class="row">
+                <div class="form-group col-md-3">
+                  <select  class="form-control" aria-label="Default select example" id="roll" name="roll">
+                    <option value="">Cual es tu destino?</option>
+                    <option value="anfitrion">Cali</option>
+                    <option value="invitado">Medellin</option>
+                    <option value="invitado">Cartagena</option>
+                    <option value="invitado">Santa Marta</option>
+                  </select>
+                </div>
+                <div class="form-group col-md-3">
+                  <input class="form-control" type="date" id="birthdaytime" name="birthdaytime">
+                </div>
+                <div class="form-group col-md-3">
+                  <input class="form-control" type="date" id="birthdaytime" name="birthdaytime">
+                </div>
+                <a href="" class="btn btn-primary col-md-1">Buscar</a>
+              </div>
+            </form>
+          </div>
+        
+      
+    </section>
+
+
+    <section id="cardindice">
+      <div class="container fluid mt-3 mb-3" >
+        <div class="row mt-3">
+          <section id="cardindice">
+            <div class="container fluid mt-3 mb-3" >
+              <div class="row mt-3">
+                {% for property in propertyp %}
+                  <div class="col-12 col-md-4">
+                    
+                      <div class="card mt-2 border-light" style="width: 22rem; height:22rem" id="cardproperty" style="width: 18rem;">
+                        
+                        <img src="{{url_for('static', filename='images/'+property.imageP)}}"  width="350" height="200"alt="...">
+                        <div class="card-body bg-light">
+                          <div class="card-text">
+                            <a href="/especificProperty/{{property._id}}">
+                            <strong>Ubicación: </strong> {{property.cityP}} <br>
+                            <strong>Valor por noche: </strong> ${{property.priceDay}} <br>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                   
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </section>
+          <br><br>
+        </div>
+      </div>
+    </section>
+    <br><br>
+    
+  <section>
+    <div class="container"></div>
+      <h1 class="item-align-center">Nuestros destinos</h1>
+      <div class="row">
+        <div class=" col-md-3">
+              <!-- Card-->
+          <div class="card-pad" style="width: 21rem; height:24rem">
+            <div class="card-body "><img src="{{url_for('static', filename='img/turismo-medellin.jpg')}}" width="300" height="150" alt="" >
+              <h5> <a href="/listpropertyByCity/medellin" class="text-dark">Medellin</a></h5>
+              <p class="small text-muted font-italic">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+              <ul class="list-inline small">
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star-o text-success"></i></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+         
+          
+        <div class="col-md-3">
+              <!-- Card-->
+          <div class="card-pad" style="width: 21rem; height:25rem">
+            <div class="card-body "><img src="{{url_for('static', filename='img/turismo-cali.jpg')}}" width="300" height="150" alt="" >
+              <h5> <a href="/listpropertyByCity/cali" class="text-dark">Cali</a></h5>
+              <p class="small text-muted font-italic">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+              <ul class="list-inline small">
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star-o text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star-o text-success"></i></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+          
+        <div class="col-md-3">
+              <!-- Card-->
+          <div class="card-pad" style="width: 21rem; height:28rem">
+            <div class="card-body "><img src="{{url_for('static', filename='img/turismo-barranquilla.jpg')}}" width="300" height="150" alt="" >
+              <h5> <a href="/listpropertyByCity/barranquilla" class="text-dark">Barranquilla</a></h5>
+              <p class="small text-muted font-italic">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+              <ul class="list-inline small">
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+          
+        <div class="col-md-3">
+              <!-- Card-->
+          <div class="card-pad" style="width: 21rem; height:28rem">
+            <div class="card-body "><img src="{{url_for('static', filename='img/turismo-santamarta.jpeg')}}" width="300" height="150" alt="" >
+              <h5> <a href="/listpropertyByCity/santa marta" class="text-dark">Santa Marta</a></h5>
+              <p class="small text-muted font-italic">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+              <ul class="list-inline small">
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star text-success"></i></li>
+                <li class="list-inline-item m-0"><i class="fa fa-star-o text-success"></i></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %} 

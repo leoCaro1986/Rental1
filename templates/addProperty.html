@@ -1,0 +1,64 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<!-- REGISTRATION FORM -->
+<div class="container">
+    <div class="text-center" style="padding:50px 0">
+        <div class="logo">Agregar nueva propiedad</div>
+        <!-- Main Form -->
+        <div class="login-form-1">
+            <form enctype="multipart/form-data" id="register-form" class="text-left" method="POST" onsubmit="return validap();" action = "{{url_for('Addproperty')}}"  >
+                <div class="login-form-main-message"></div>
+                <div class="main-login-form">
+                    <div class="login-group">
+                        <div class="form-group">
+                            <select class="form-select" aria-label="Default select example" id="cityP" name="cityP">
+                                <option value="">Selecciona una Ciudad</option>
+                                <option value="medellin">Medellin</option>
+                                <option value="cali">Cali</option>
+                                <option value="barranquilla">Barranquilla</option>
+                                <option value="santa marta">Santa Marta</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="countryP" class="sr-only"></label>
+                            <input type="text" class="form-control" id="countryP" name="countryP" placeholder="País">
+                        </div>
+                        <div class="form-group">
+                            <label for="adressP" class="sr-only"></label>
+                            <input type="text" class="form-control" id="adressP" name="adressP" placeholder="Dirección">
+                        </div>
+                        <div class="form-group">
+                            <label for="ubication" class="sr-only"></label>
+                            <input type="text" class="form-control" id="ubication" name="ubication" placeholder="Ubicación en Google Maps">
+                        </div>
+                        <div class="form-group">
+                            <label for="roomNumber" class="sr-only"></label>
+                            <input type="number" class="form-control" id="roomNumber" name="roomNumber" placeholder="Numero de habitaciones">
+                        </div> <br>
+                        <div class="form-group">
+                            <label for="imageP" class="sr-only">Cargue imagen destacada</label>
+                            <input type="file" class="form-control" id="imageP" name="imageP" placeholder="Cargue sus imagenes aquí">
+                        </div> <br>
+                        <div class="form-group">
+                            <label for="imageMain" class="sr-only">Cargue las imagenes</label>
+                            <input type="file" class="form-control" id="imageMain[]" name="imageMain[]" multiple="">
+                        </div> <br>
+                        <div class="form-group">
+                            <label for="priceDay" class="sr-only"></label>
+                            <input type="number" class="form-control" id="priceDay" name="priceDay" placeholder="Valor por noche">
+                        </div> <br>
+                        <div class="form-group">
+                            <label for="Description" class="sr-only" width="30">Ingrese la descripción de la propiedad</label>
+                            <textarea name="Description" id="Description" type="text" class="form-control" cols="30" rows="10"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+                 </div>
+            </form>
+        </div>
+        <!-- end:Main Form -->
+    </div>
+</div>
+
+{% endblock %}

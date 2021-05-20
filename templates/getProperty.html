@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<section>
+  <div class="container fluid mt-3 mb-3">
+    <div class="row">
+      <div class="col">
+        
+        <form class="form-inline" >
+          {% if session['roll'] == "anfitrion" %}
+            <a href="/editUser/{{user}}" class="btn btn-primary">Editar perfil</a>
+            <a href="{{ url_for('addproperty') }}" class="btn btn-primary">Crea una nueva propiedad</a>
+          {% endif %}  
+
+          {% if session['roll'] == "invitado" %}
+            <a href="/editUser/{{user}}" class="btn btn-primary">Editar perfil</a>
+            <a href="{{ url_for('addproperty') }}" class="btn btn-primary">Realizar reserva</a>
+            <a href="{{ url_for('addproperty') }}" class="btn btn-primary">Ver historial de reservas</a>          
+          {% endif %}  
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% if mensaje != none %}
+<section>
+  <div>
+    <h2 style="text-align:center;font-family: 'Numans', sans-serif; margin-top:7.5%;">{{mensaje}}</h2>
+  </div>
+</section>
+{%endif %}
+<section>
+  <div class="container fluid mt-3 mb-3">
+    <div class="row mt-3">
+      {% for property in propertyp %}
+      <div class="col-12 col-md-4" >
+        <div class="card mt-2 border-light" id="card2"  style="width: 22rem; height:35rem ">
+          
+            <img src="{{url_for('static', filename='images/'+property.imageP)}}" class="card-img-top" width="350" height="200"alt="...">
+            <div class="card-body bg-light ">
+              <h5 class="title">Decripción: </h5>
+              <p class="list-group">{{property.Description}}</p>
+              <ul class="card-text">
+                <li class="list-group ">Ubicada en la ciudad de {{property.cityP}} de {{property.countryP}}</li>
+                <li class="list-group">En la {{property.adreesP}}</li>
+                <li class="list-group">Numero de habitaciones: {{property.roomNumber}}</li>
+                <li class="list-group"> Valor x noche: {{property.priceDay}}</li>
+              </ul>
+              <div class="row m-0 text-center align-items-center justify-content-center">
+                {% if session['roll'] == "anfitrion" %}
+                  <form class="form-inline" >
+                    <a href="/editProperty/{{property._id}}" class="btn btn-primary ">Editar</a>
+                    <a href="/deleteP/{{property._id}}" class="btn btn-danger btn-delete">Eliminar</a>
+                  </form>
+                {% endif %}    
+              </div>  
+            </div>
+           
+        </div>
+      </div>
+      {% endfor %} 
+    </div>
+  </div>
+</section>
+
+{% endblock %}

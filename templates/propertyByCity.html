@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+
+    <section id="cardindice">
+        <div class="container fluid mt-3 mb-3" >
+        <div class="row mt-3">
+            <section id="cardindice">
+            <div class="container fluid mt-3 mb-3" >
+                <div class="row mt-3">
+                {% for property in propertyc %}
+                    <div class="col-12 col-md-4">
+                    
+                        <div class="card mt-2 border-light" style="width: 22rem; height:22rem" id="cardproperty" style="width: 18rem;">
+                        
+                        <img src="{{url_for('static', filename='images/'+property.imageP)}}"  width="350" height="200"alt="...">
+                        <div class="card-body bg-light">
+                            <div class="card-text">
+                            <a href="/especificProperty/{{property._id}}">
+                            <strong>Ubicación: </strong> {{property.cityP}} <br>
+                            <strong>Valor por noche: </strong> ${{property.priceDay}} <br>
+                            </a>
+                            </div>
+                        </div>
+                        </div>
+                    
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+            </section>
+            <br><br>
+        </div>
+        </div>
+    </section>
+  <br><br>
+
+
+
+
+{% endblock %}

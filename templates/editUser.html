@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+{% block body %}
+
+<div class="container" height="520">
+    <div class="text-center" style="padding:10px 0" >
+        <div class="logo">        Editar perfil       </div>
+        <!-- Main Form -->
+        <div class="login-form-1">
+            {% for usered in user %}
+            <form id="register-form" method="POST" action = "{{url_for('editDBUser', id=usered._id)}}" class="text-left" onsubmit="return validasign_in();">
+                <div class="login-form-main-message"></div>
+                <div class="main-login-form">
+                    <div class="login-group">
+                        <div class="form-group">
+                            <label for="name" class="sr-only"></label>
+                            <input type="text" class="form-control"  value="{{usered.name}}" id="name" name="name" placeholder="Nombres">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname" class="sr-only"></label>
+                            <input type="text" class="form-control" value="{{usered.lastname}}" id="lastname" name="lastname" placeholder="Apellidos">
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="sr-only"></label>
+                            <input type="text" class="form-control" value="{{usered.email}}" id="email" name="email" placeholder="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="country" class="sr-only"></label>
+                            <input type="text" class="form-control" value="{{usered.country}}" id="country" name="country" placeholder="Pais">
+                        </div>
+                        <div class="form-group">
+                            <label for="city" class="sr-only"></label>
+                            <input type="text" class="form-control" value="{{usered.city}}" id="city" name="city" placeholder="Ciudad">
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="sr-only"></label>
+                            <input type="password" class="form-control" value="{{usered.password}}" id="password" name="password" placeholder="Contraseña">
+                        </div>
+                        <div class="form-group">
+                            <select class="form-select"  value="{{usered.roll}}" aria-label="Default select example" id="roll" name="roll">
+                                <option value="">Selecciona tu Rol</option>
+                                <option value="anfitrion">Anfitrión</option>
+                                <option value="invitado">Invitado</option>
+                            </select>
+                        </div>
+
+
+                    </div>
+                    <button type="submit" class="login-button"><i class="fa fa-chevron-right"></i></button>
+                 </div>
+            </form>
+            {% endfor %}
+        </div>
+        <!-- end:Main Form -->
+    </div>
+</div>
+
+
+{% endblock  %}
