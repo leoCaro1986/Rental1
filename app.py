@@ -111,23 +111,24 @@ def getProperty():
 
 @app.route('/getPropertyByIdUser/<id>')
 def getPropertyByIdUser(id):
-    property = propertyCollection.find_one({'id_user': ObjectId(id)})
     result = []
     mensaje = ""
+    property = propertyCollection.find({'id_user': ObjectId(id)})
     if property is None:
         return render_template("getProperty.html", mensaje = "El usuario no tiene ninguna propiedad asociada")    
-    result.append({
-        '_id':property['_id'],
-        'cityP':property['cityP'],
-        'countryP': property['countryP'],
-        'adressP': property['adressP'],
-        'ubication': property['ubication'],
-        'roomNumber': property['roomNumber'],
-        'imageP': property['imageP'],
-        'priceDay': property['priceDay'],
-        'Description': property['Description'],
-        'listimage': property['listimage']
-    })
+    for doc in property:
+        result.append({
+            '_id':doc['_id'],
+            'cityP':doc['cityP'],
+            'countryP': doc['countryP'],
+            'adressP': doc['adressP'],
+            'ubication': doc['ubication'],
+            'roomNumber': doc['roomNumber'],
+            'imageP': doc['imageP'],
+            'priceDay': doc['priceDay'],
+            'Description': doc['Description'],
+            'listimage': doc['listimage']
+        })
     return render_template("getProperty.html", propertyp = result)        
 
 #insertar propiedades en la base de datos
@@ -289,7 +290,7 @@ def listpropertyByCity(ciudad):
             'Description': doc['Description'],
             'id_user': doc['id_user']
     })
-        return render_template('propertyByCity.html', propertyc = result)
+    return render_template('propertyByCity.html', propertyc = result)
 
 
 @app.route('/logout')
