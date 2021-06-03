@@ -1,9 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+import time
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import pymongo
 from bson.objectid import ObjectId
 import os
 from bson import ObjectId
 from pymongo.collation import CollationAlternate
+from datetime import datetime
+
 # from flask_pymongo import Pymongo
 
 
@@ -64,7 +67,16 @@ def especificProperty(id):
         'Description': property['Description'],
         'listimage': property['listimage']
     })
-    return render_template("especificProperty.html", propertyp = result)
+    if not session:
+        return render_template("especificProperty.html", propertyp = result)
+    username = session["user"]
+    user = userCollection.find_one({'email': username})
+    session['roll'] = user["roll"]
+    if 'user' in session:
+        return render_template("especificProperty.html", propertyp = result, user = user["_id"])  
+    else: 
+        return render_template("index.html")
+    
 
 @app.route('/login')
 def login():
@@ -129,7 +141,9 @@ def getPropertyByIdUser(id):
             'Description': doc['Description'],
             'listimage': doc['listimage']
         })
-    return render_template("getProperty.html", propertyp = result)        
+    username = session["user"]
+    user = userCollection.find_one({'email': username})    
+    return render_template("getProperty.html", propertyp = result, user = user["_id"])        
 
 #insertar propiedades en la base de datos
 @app.route('/Addproperty', methods=["POST"])
@@ -142,6 +156,7 @@ def Addproperty():
         imageP = request.files['imageP']
         priceDay = request.form.get('priceDay')
         Description = request.form.get('Description')
+        # state = request.form.get('state')
         imageMain = request.files.getlist('imageMain[]')
         mainimage = imageP.filename
         imageP.save(os.path.join(app.config['UPLOAD_FOLDER'], mainimage))
@@ -152,7 +167,7 @@ def Addproperty():
         username = session["user"]
         user = userCollection.find_one({'email': username}) 
         idUser = str(user['_id'])   
-        insertProperty={'cityP': cityP, 'countryP': countryP, 'adressP': adressP, 'ubication': ubication, 'roomNumber': roomNumber, 'imageP': mainimage, 'priceDay': priceDay, 'Description': Description,'listimage':name_images,"id_user":user['_id'] }
+        insertProperty={'cityP': cityP, 'countryP': countryP, 'adressP': adressP, 'ubication': ubication, 'roomNumber': roomNumber, 'imageP': mainimage, 'priceDay': priceDay, 'Description': Description,'listimage':name_images,"id_user":user['_id'] , "state":"Disponible"}
         save = propertyCollection.insert_one(insertProperty)
         return redirect(url_for('getPropertyByIdUser', id = idUser))
 
@@ -160,13 +175,13 @@ def Addproperty():
 @app.route('/sign_up', methods=["POST"])
 def sign_up():
         name = request.form.get('name')
-        lastname = request.form.get('lastname')
+        lastname = request.form.get('lastName')
         email = request.form.get('email')
         country = request.form.get('country')
         city = request.form.get('city')
         password = request.form.get('password')
         roll = request.form.get('roll')
-        inserUser = {'name':name, 'lastname':lastname, 'email':email, 'country':country, 'city':city, 'password':password, 'roll':roll}
+        inserUser = {'name':name, 'lastName':lastname, 'email':email, 'country':country, 'city':city, 'password':password, 'roll':roll}
         save = userCollection.insert_one(inserUser)
         return redirect(url_for('index'))
         
@@ -239,20 +254,21 @@ def editUser(id):
     result.append({
         '_id':userEd['_id'],
         'name':userEd['name'],
-        'lastname':userEd['lastname'],
+        'lastName':userEd['lastName'],
         'email':userEd['email'],
         'country':userEd['country'],
         'city':userEd['city'],
         'password':userEd['password'],
         'roll':userEd['roll']
     })
+    
     return render_template("editUser.html", user = result)
 
 #Guardar datos de ususario editado en base de datos
 @app.route('/editDBUser/<id>', methods=['POST'])
 def editDBUser(id):
         name = request.form.get('name')
-        lastname = request.form.get('lastname')
+        lastName = request.form.get('lastName')
         email = request.form.get('email')
         country = request.form.get('country')
         city = request.form.get('city')
@@ -260,14 +276,15 @@ def editDBUser(id):
         roll = request.form.get('roll')
         userCollection.update_one({'_id': ObjectId(id)}, {"$set": {
             'name': name,
-            'lastname': lastname,
+            'lastName': lastName,
             'email': email,
             'country': country,
-            'city': city,
+            'city': city,   
             'password': password,
             'roll': roll
         }})
-        return redirect(url_for('getProperty'))
+        session.clear()
+        return render_template('login.html')
 
 @app.route('/propertyByCity')
 def propertyByCity():
@@ -293,10 +310,113 @@ def listpropertyByCity(ciudad):
     return render_template('propertyByCity.html', propertyc = result)
 
 
+@app.route('/ReserveProperty')
+def ReserveProperty():
+    return render_template("ReserveProperty.html") 
+
+@app.route('/ReservePropertyByState/<id>')
+def ReservePropertyByState(id):
+    if 'user' in session:
+        property = propertyCollection.find_one({'_id': ObjectId(id)})
+        result = []
+        result.append({
+            '_id':property['_id'],
+            'cityP':property['cityP'],
+            'countryP': property['countryP'],
+            'adressP': property['adressP'],
+            'ubication': property['ubication'],
+            'roomNumber': property['roomNumber'],
+            'imageP': property['imageP'],
+            'priceDay': property['priceDay'],
+            'Description': property['Description'],
+            'listimage': property['listimage'],
+            'state': property['state']
+        })
+        return render_template('ReserveProperty.html', propertyc = result)
+    else:
+        return render_template('login.html')
+
+@app.route('/ReservePropertyById/<id>', methods=['POST'])
+def ReservePropertyById(id):
+    bandera = 0
+    dateIni = request.form.get('dateIni')
+    dateEnd = request.form.get('dateEnd')
+    price = request.form.get('price')
+    newDateIni =int(datetime.strptime(dateIni, '%Y-%m-%d').strftime('%y%m%d'))
+    newDateEnd =int(datetime.strptime(dateEnd, '%Y-%m-%d').strftime('%y%m%d'))
+    reserva = reservaCollection.find_one({'id_property':  ObjectId(id)})
+    if reserva is not None:
+        dateIniReserva = reserva['dateIni']
+        dateEndReserva = reserva['dateEnd']
+        if ((newDateIni >= dateIniReserva ) and (newDateEnd <= dateEndReserva) or (newDateIni >= dateIniReserva ) and (newDateIni <= dateEndReserva ) or (newDateEnd >= dateIniReserva) and (newDateEnd <= dateEndReserva)) and (reserva is not None):
+            bandera = 1
+            property = propertyCollection.find_one({'_id': ObjectId(id)})
+            result = []
+            result.append({
+                '_id':property['_id'],
+                'cityP':property['cityP'],
+                'countryP': property['countryP'],
+                'adressP': property['adressP'],
+                'ubication': property['ubication'],
+                'roomNumber': property['roomNumber'],
+                'imageP': property['imageP'],
+                'priceDay': property['priceDay'],
+                'Description': property['Description'],
+                'listimage': property['listimage'],
+                'state': property['state']
+            })
+            return render_template('ReserveProperty.html', propertyc = result, message = "Propiedad no disponible para estas fechas",switch = bandera)
+        else:
+            bandera = 0   
+            property = propertyCollection.find_one({'_id':  ObjectId(id)})
+
+            username = session["user"]
+            user = userCollection.find_one({'email': username}) 
+            insertReserve={'cityP': property['cityP'] ,'adressP': property['adressP'],  'roomNumber': property['roomNumber'], 'priceDay': property['priceDay'], "dateIni": newDateIni, "dateEnd": newDateEnd,"price":price,"id_user":user['_id'],'id_property': property['_id']}
+            save = reservaCollection.insert_one(insertReserve)
+            if save is not None:
+                propertyCollection.update_one({'_id': ObjectId(id)}, {"$set": {
+                    'state': 'No disponible'
+                }})
+            return redirect(url_for('HistoryReservePropertyById',id=id))
+    else:
+        bandera = 0   
+        property = propertyCollection.find_one({'_id':  ObjectId(id)})
+
+        username = session["user"]
+        user = userCollection.find_one({'email': username}) 
+        insertReserve={'cityP': property['cityP'] ,'adressP': property['adressP'],  'roomNumber': property['roomNumber'], 'priceDay': property['priceDay'], "dateIni": newDateIni, "dateEnd": newDateEnd,"price":price,"id_user":user['_id'],'id_property': property['_id']}
+        save = reservaCollection.insert_one(insertReserve)
+        if save is not None:
+            propertyCollection.update_one({'_id': ObjectId(id)}, {"$set": {
+                    'state': 'No disponible'
+            }})
+        return redirect(url_for('HistoryReservePropertyById',id=id))        
+
+@app.route('/HistoryReserveProperty')
+def HistoryReserveProperty():
+    return render_template("HistoryReserveProperty.html") 
+
+@app.route('/HistoryReservePropertyById/<id>')
+def HistoryReservePropertyById(id):
+    result = []
+    for doc in reservaCollection.find({'id_property': ObjectId(id)}):
+        result.append({
+            '_id':doc['_id'],
+            'cityP':doc['cityP'],
+            'adressP': doc['adressP'],
+            'roomNumber': doc['roomNumber'],
+            'priceDay': doc['priceDay'],
+            'id_user': doc['id_user'],
+            'dateIni': doc['dateIni'],
+            'dateEnd': doc['dateEnd'],
+            'price': doc['price']
+        })
+    return render_template('HistoryReserveProperty.html', propertyc = result)    
+
 @app.route('/logout')
 def logout():
     session.clear()
     return redirect(url_for('index'))
 
-if __name__ == '__main__':
-    app.run(debug=True) #se genera el servidor loca
+if __name__ == '__main__':    app.run(debug=True) #se genera el servidor loca

@@ -30,7 +30,7 @@ function validateLogin() {
 function validasign_in(){
    debugger;
     let name = document.getElementById("name").value;
-    let lastname = document.getElementById("lastname").value;
+    let lastname = document.getElementById("lastName").value;
     let email = document.getElementById("email").value;
     let country = document.getElementById("country").value;
     let city = document.getElementById("city").value;
@@ -158,7 +158,10 @@ function validap(){
    let ubicationP = document.getElementById("ubication").value;
    let roomNumber = document.getElementById("roomNumber").value;
    let priceDay = document.getElementById("priceDay").value;
+   let dateIni = document.getElementById("dateIni").value;
+   let dateEnd = document.getElementById("dateEnd").value;
    let Description = document.getElementById("Description").value;
+   var RegExPattern = /^\d{1,2}\/\d{1,2}\/\d{2,4}$/;
    const pattern = new RegExp('^[A-Z]+$', 'i');
    const url = new RegExp(/^http\:\/\/|https\:\/\/|www\.google$/);
    //Validacion de ciudad
@@ -209,7 +212,82 @@ function validap(){
       return false;
    }
 
+   
 }
+
+function validarFormatoFecha()
+{
+   if (((dateIni.match(RegExPattern)) && (dateIni!='')) && (dateEnd.match(RegExPattern)) && (dateEnd!='')) 
+   {
+      return true;
+   } else {
+      return false;
+   }
+
+}
+
+function existeFecha(){
+   dateIni = fecha.split("/");
+   var day = fechaf[0];
+   var month = fechaf[1];
+   var year = fechaf[2];
+   var date = new Date(year,month,'0');
+   if((day-0)>(date.getDate()-0)){
+         return false;
+   }
+   return true;
+}
+
+function existeFecha2 () {
+     dateEnd = fecha.split("/");
+     var d = fechaf[0];
+     var m = fechaf[1];
+     var y = fechaf[2];
+     return m > 0 && m < 13 && y > 0 && y < 32768 && d > 0 && d <= (new Date(y, m, 0)).getDate();
+}
+function validateDate() {
+   debugger;
+  
+   console.log(price)
+
+  
+}
+
+$('#dateEnd').on('change', event => {
+   debugger;
+   
+   let fechaini = document.getElementById("dateIni").value;
+   let dateEnd = event.target.value;
+   let priceDay = document.getElementById("priceDay").value;
+   var fecIni = new Date(fechaini);
+   var fecEnd = new Date(dateEnd);
+
+   monthIni = (fecIni.getMonth() + 1);
+   dayIni = (fecIni.getDate() + 1);
+   yearIni = fecIni.getFullYear();
+
+   monthEnd = (fecEnd.getMonth() + 1);
+   dayEnd = (fecEnd.getDate() + 1);
+   yearEnd = fecEnd.getFullYear();
+
+   price = priceDay * (dayEnd - dayIni)
+
+   if (this.dayIni ==  this.dayEnd ) {
+      price = priceDay * 1
+      $('#price').val(price);   
+   }
+
+   if (this.fechaini == "" && this.fecEnd == "") {
+      $("#price").hide();
+   } else {
+      $("#price").show();
+      $('#price').val(price);           
+   }  
+
+   price = null
+})
+
+
 
 // Validacion del boton eliminar propuedad
 const btnDeleteP = document.querySelectorAll('.btn-delete');

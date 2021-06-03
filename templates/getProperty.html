@@ -14,8 +14,8 @@
 
           {% if session['roll'] == "invitado" %}
             <a href="/editUser/{{user}}" class="btn btn-primary">Editar perfil</a>
-            <a href="{{ url_for('addproperty') }}" class="btn btn-primary">Realizar reserva</a>
-            <a href="{{ url_for('addproperty') }}" class="btn btn-primary">Ver historial de reservas</a>          
+            <!-- <a href="{{ url_for('index') }}" class="btn btn-primary">Realizar reserva</a> -->
+            <a href="{{ url_for('HistoryReservePropertyById', id=user) }}" class="btn btn-primary">Ver historial de reservas</a>          
           {% endif %}  
         </form>
       </div>
@@ -53,10 +53,16 @@
                     <a href="/deleteP/{{property._id}}" class="btn btn-danger btn-delete">Eliminar</a>
                   </form>
                 {% endif %}    
-              </div>  
+              </div>
+              {% if session['roll'] == "invitado" %}
+                <div class="" style="text-align:center;">
+                  <a href="/ReservePropertyByState/{{property._id}}" class="btn btn-primary">Reservar</a>
+                </div>
+              {% endif %} 
             </div>
-           
+          
         </div>
+           
       </div>
       {% endfor %} 
     </div>
